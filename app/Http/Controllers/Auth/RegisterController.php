@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -62,12 +63,34 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    public function showRegistrationForm()
     {
+        return view('auth.signup');
+    }
+
+    public function register(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'dob' => 'nullable|date',
+            'gender' => 'required|string',
+            'phone' => 'nullable|string|max:20',
+            'class' => 'required|string|max:100',
+            'class_arm' => 'nullable|string|max:50',
+            'email' => 'required|string|unique:users,email|max:255',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+   
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'phone' => $request->phone,
+            'class' => $request->class,
+            'class_arm' => $request->class_arm,
+            'password' => Hash::make($request['password']),
+            'visible_password' => $request->password
         ]);
     }
 }

@@ -26,6 +26,10 @@ class User extends Authenticatable
         'occupation',
         'address',
         'phone',
+        'gender',
+        'dob',
+        'class',
+        'class_arm',
         'bio',
         'is_admin',
         'stud_id'
