@@ -79,6 +79,8 @@ class RegisterController extends Controller
             'class_arm' => 'nullable|string|max:50',
             'email' => 'required|string|unique:users,email|max:255',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'email.unique' => 'The email address is already registered. Please use a different email.',
         ]);
    
         return User::create([
@@ -92,5 +94,7 @@ class RegisterController extends Controller
             'password' => Hash::make($request['password']),
             'visible_password' => $request->password
         ]);
+
+        return redirect()->route('login')->with('success', 'You have successfully registered. Please log in with your email and password.');
     }
 }
